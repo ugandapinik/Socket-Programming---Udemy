@@ -6,27 +6,29 @@ public class Ping {
     public static void main(String[] args) {
         try{
 
-            String hostAddress = "google.com";
+            String hostAddress = "192.168.1.123";
             InetAddress host = InetAddress.getByName(hostAddress);
             System.out.println(host.isReachable(1000));
 
 
-            Process process = Runtime.getRuntime().exec("ping " + hostAddress);
+            Process process = Runtime.getRuntime().exec("ping -i .5  -t 6 " + hostAddress);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
             String commandOutput = "";
-            boolean isReachable = false;
+            boolean isReachable = true;
 
             while((commandOutput = bufferedReader.readLine()) != null){
                 //System.out.println(commandOutput);
-                if (commandOutput.contains("Destination host unreachable")){
+                if (commandOutput.contains("Request timeout")){
                     isReachable = false;
                     break;
                 }
             }
 
             if (isReachable){
-                System.out.println();
+                System.out.println("Host is reachable!");
+            }else{
+                System.out.println("Host is not reachable!");
             }
 
 
